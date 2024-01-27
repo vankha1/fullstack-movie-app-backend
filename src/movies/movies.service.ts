@@ -1,19 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import { CreateMovieInput } from './dto/create-movie.input';
 import { UpdateMovieInput } from './dto/update-movie.input';
+import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class MoviesService {
+
+  constructor(private prisma: PrismaService) {}
+
   create(createMovieInput: CreateMovieInput) {
     return 'This action adds a new movie';
   }
 
   findAll() {
-    return `This action returns all movies`;
+    return this.prisma.movie.findMany()
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} movie`;
+    return this.prisma.movie.findUnique({ 
+      where: {
+        id: id
+      }
+     });
   }
 
   update(id: number, updateMovieInput: UpdateMovieInput) {
